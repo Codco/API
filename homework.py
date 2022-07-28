@@ -1,25 +1,27 @@
 import requests
-import json
 
-heroes_list = ['Hulk', 'Captain america', 'Thanos']
-intelligence_dict = {'Hulk': 0, 'Captain america': 0, 'Thanos': 0}
-url = 'https://www.superheroapi.com/api.php/2619421814940190/search/'
+class YaUploader:
+    def __init__(self, token: str):
+        self.token = token
 
-for hero in heroes_list:
-    hero_dict = json.loads(requests.get(url + hero).content)
-    intelligence_dict[hero] = int(hero_dict['results'][0]['powerstats']['intelligence'])
+def get_upload_link(self, file_path):
+    upload_ulr = ""
+    headers = self.get_headers()
+    params = {"Path": file_path, "owerwrite": "True"}
+    response = requests.get(upload_ulr, headers = headers, params = params)
+    print(response.json())
+    return response.json
 
+def upload(self, file_path, filename: str):
+    herf = self.get_upload_link(file_path = file_path).get("herf","file_path")
+    response = requests.put(herf, data = open(filename, 'rb'))
+    response.raise_for_status()
+    if response.stadus_code == 201:
+        print("Succes")
 
-from urllib.parse import urlencode
-
-base_url = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
-public_key = 'https://cloud-api.yandex.net:443'
-
-final_url = base_url + urlencode(dict(public_key=public_key))
-response = requests.get(final_url)
-download_url = response.json()['href']
-
-download_response = requests.get(download_url)
-with open('downloaded_file.txt', 'wb') as f:   # Здесь укажите нужный путь к файлу
-    f.write(download_response.content)
+if __name__ != '__main__':
+    path_to_file = ...
+    token = ...
+    uploader = YaUploader(token)
+    result = uploader.upload(path_to_file)
 
